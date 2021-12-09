@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.db.models.signals import m2m_changed
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, \
     DeleteView
+from django.core.cache import cache
 
 from .forms import NewsForm
 from .models import Post, Category
@@ -51,6 +52,15 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'Post-{self.kwargs["pk"]}', None)
+
+        if not obj:
+            obj = super().get_object(*args, **kwargs)
+            cache.set(f'Post-{self.kwargs["pk"]}', obj)
+
+        return obj
 
 
 class PostCreateView(PermissionRequiredMixin, CreateView):

@@ -9,7 +9,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
-cache_files/
+cache_files/*
 
 # Generated files
 .idea/**/contentModel.xml

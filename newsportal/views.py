@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import Group
@@ -6,6 +8,7 @@ from django.db.models.signals import m2m_changed
 from django.views.generic import ListView, UpdateView, CreateView, DetailView, \
     DeleteView
 from django.core.cache import cache
+from django.http import HttpResponse
 
 from .forms import NewsForm
 from .models import Post, Category
@@ -109,5 +112,51 @@ def article_added(sender, instance, action, **kwargs):
     if action == 'post_add':
         send_new_article_mail.delay(instance.id)
 
+
+def test_log(request):
+    logger_django = logging.getLogger('django')
+    logger_django_request = logging.getLogger('django.request')
+    logger_django_server = logging.getLogger('django.server')
+    logger_django_template = logging.getLogger('django.template')
+    logger_django_db_backends = logging.getLogger('django.db_backends')
+    logger_django_security = logging.getLogger('django.security')
+
+    logger_django.debug("django debug message")
+    logger_django.info('django info message')
+    logger_django.warning('django warning message')
+    logger_django.error('django error message')
+    logger_django.critical('django critical message')
+
+    logger_django_request.debug("logger_django_request debug message")
+    logger_django_request.info('logger_django_request info message')
+    logger_django_request.warning('logger_django_request warning message')
+    logger_django_request.error('logger_django_request error message')
+    logger_django_request.critical('logger_django_request critical message')
+
+    logger_django_server.debug("logger_django_server debug message")
+    logger_django_server.info('logger_django_server info message')
+    logger_django_server.warning('logger_django_server warning message')
+    logger_django_server.error('logger_django_server error message')
+    logger_django_server.critical('logger_django_server critical message')
+
+    logger_django_template.debug("logger_django_template debug message")
+    logger_django_template.info('logger_django_template info message')
+    logger_django_template.warning('logger_django_template warning message')
+    logger_django_template.error('logger_django_template error message')
+    logger_django_template.critical('logger_django_template critical message')
+
+    logger_django_db_backends.debug("logger_django_db_backends debug message")
+    logger_django_db_backends.info('logger_django_db_backends info message')
+    logger_django_db_backends.warning('logger_django_db_backends warning message')
+    logger_django_db_backends.error('logger_django_db_backends error message')
+    logger_django_db_backends.critical('logger_django_db_backends critical message')
+
+    logger_django_security.debug("logger_django_security debug message")
+    logger_django_security.info('logger_django_security info message')
+    logger_django_security.warning('logger_django_security warning message')
+    logger_django_security.error('logger_django_security error message')
+    logger_django_security.critical('logger_django_security critical message')
+
+    return HttpResponse(status=201)
 
 m2m_changed.connect(article_added, sender=Post.category.through)

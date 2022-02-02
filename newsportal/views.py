@@ -157,6 +157,6 @@ def test_log(request):
     logger_django_security.error('logger_django_security error message')
     logger_django_security.critical('logger_django_security critical message')
 
-    return HttpResponse(status=201)
+    return HttpResponse(status=200)
 
 m2m_changed.connect(article_added, sender=Post.category.through)
